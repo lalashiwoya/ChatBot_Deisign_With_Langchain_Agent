@@ -1,2 +1,13 @@
 [memory]
 max_token_limit = 500
+
+[llama_index]
+top_k = 3
+chunk_size = 300
+
+[dataset.llm_finetune]
+dir = "data/llm_finetune"
+if_clean_texts = false
+url_path = "data/llm_finetune/web_text_urls/urls.txt"
+db_path = "data/llm_finetune/db"
+
