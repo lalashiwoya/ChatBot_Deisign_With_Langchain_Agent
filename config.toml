@@ -10,4 +10,5 @@ dir = "data/llm_finetune"
 if_clean_texts = false
 url_path = "data/llm_finetune/web_text_urls/urls.txt"
 db_path = "data/llm_finetune/db"
+pdf_dir = "data/llm_finetune/pdfs/"
 

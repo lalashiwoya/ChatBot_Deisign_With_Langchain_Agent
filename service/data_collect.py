@@ -7,6 +7,7 @@ from llama_index.core.node_parser import SentenceSplitter
 from llama_index.readers.web import SimpleWebPageReader
 from langchain.chat_models import ChatOpenAI
 from utils import init_llm
+from llama_index.core import SimpleDirectoryReader
 
 class DocumentRefiner:
     def __init__(self, llm: BaseChatModel,
@@ -41,19 +42,30 @@ class DocumentRefiner:
 
         return cleaned_docs
 
+class PagesToDocuments:
+    def __init__(self, path: str,
+                 clean_texts: bool = False,
+                 chunk_size: int = 3000,
+                 chunk_overlap: int = 0):
+        self.path = path
+        self.llm = init_llm()
+        self.text_cleaner = DocumentRefiner(self.llm, 
+                                            chunk_size= chunk_size,
+                                            chunk_overlap=chunk_overlap)
+        self.clean_texts = clean_texts
+        self.docs = self.get_all_documents()
+        
+        def get_all_documents(self) -> List[Document]:
+            pass
+        
 
-
-class WebPagesToDocuments:
+class WebPagesToDocuments(PagesToDocuments):
     def __init__(self, path: str,
                  clean_texts: bool = False,
                  chunk_size:int = 3000,
                  chunk_overlap:int = 0):
-        self.path = path
-        self.clean_texts = clean_texts
-        self.chunk_size = chunk_size
-        self.chunk_overlap = chunk_overlap
-        self.llm = init_llm()
-        self.docs = self.get_all_documents_from_url_file()
+        super().__init__(path, clean_texts, chunk_size, chunk_overlap)
+        self.docs = self.get_all_documents()
     
     def get_document_from_url(self, url:str) -> Document:
         doc = SimpleWebPageReader(html_to_text=True).load_data(
@@ -61,7 +73,7 @@ class WebPagesToDocuments:
         doc.metadata['doc_id'] = doc.doc_id
         return doc
         
-    def get_all_documents_from_url_file(self) -> List[Document]:
+    def get_all_documents(self) -> List[Document]:
         docs = []
         with open(self.path) as file:
             urls = file.read().splitlines()
@@ -69,9 +81,25 @@ class WebPagesToDocuments:
             docs.append(self.get_document_from_url(url))
         
         if self.clean_texts:
-            text_cleaner = DocumentRefiner(self.llm, chunk_size= self.chunk_size,
-                                   chunk_overlap=self.chunk_overlap)
-            docs = text_cleaner.refine_html_files(docs)
+            docs = self.text_cleaner.refine_html_files(docs)
         return docs
+
+class PdfPagesToDocuments(PagesToDocuments):
+      def __init__(self, path: str,
+                 clean_texts: bool = False,
+                 chunk_size:int = 3000,
+                 chunk_overlap:int = 0):
+        super().__init__(path, clean_texts, chunk_size, chunk_overlap)
+        self.docs = self.get_all_documents()
     
+      def get_all_documents(self) -> List[Document]:
+         docs = SimpleDirectoryReader(self.path).load_data()
+         for doc in docs:
+            doc.metadata['doc_id'] = doc.metadata['file_name']
+         if self.clean_texts:
+            docs = self.text_cleaner.refine_html_files(docs)
+         return docs
+        
+         
+
 
