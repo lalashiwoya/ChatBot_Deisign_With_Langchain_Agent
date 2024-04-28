@@ -1,1 +1,2 @@
-What does Dan need today?
+# Welcome to Dan's Platform! 🚀🤖
+
