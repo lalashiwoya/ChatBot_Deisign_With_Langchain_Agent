@@ -1,7 +1,7 @@
 
 import chainlit as cl
 from langchain.chat_models import ChatOpenAI
-from utils import init_llm, init_memory, convert_memory_to_str
+from utils import init_llm, init_memory
 from llama_index.core import Settings
 from api.full_chain import init_full_chain
 from langchain.schema.runnable.config import RunnableConfig
@@ -28,7 +28,7 @@ async def on_message(message: cl.Message):
     async for chunk in full_chain.astream(
         {
             "question": message.content,
-            "memory": convert_memory_to_str(memory),
+            "memory": memory,
              
         },
         config=RunnableConfig(callbacks=[cl.LangchainCallbackHandler()]),

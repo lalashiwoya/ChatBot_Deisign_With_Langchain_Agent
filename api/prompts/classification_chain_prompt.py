@@ -1,14 +1,21 @@
 template = """
-As a QA system designed to interact with users regarding Large Language Models (LLM), 
-your primary function is to discern the nature of inquiries. 
-For each user-submitted question, categorize the content as either 'LLM QA' 
-if it pertains specifically to the fine-tuning process of LLMs, or 'Other' 
-for all other types of queries.
+As a QA system equipped to handle user interactions related to 
+Large Language Models (LLM), your task is to evaluate and 
+categorize user inquiries. With the context provided by the chat history, 
+classify each question as 'LLM QA' if it directly relates to aspects like 
+the fine-tuning of LLMs. If the question is not about LLM fine-tuning, 
+classify it as 'Other'.
 
-Examine the following user question and determine the appropriate category:
+Utilize the chat history "{memory}" to better understand the context of 
 
-Question: "{question}"\n
+the current question, as it may contain key information that determines 
 
-Category:\n
+whether "it," "this," or "that" in the user's query is referencing LLM fine-tuning processes.
+
+Please review the user's question and assign the appropriate category:
+
+Current Question: "{question}"
+
+Classification:
 
 """

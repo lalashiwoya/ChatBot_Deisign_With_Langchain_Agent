@@ -27,7 +27,7 @@ class LlamaRetriever(BaseRetriever):
         for i, node in enumerate(response.source_nodes):
             url = node.metadata['doc_id']
             text = node.text
-            url_with_text = f"Source: {i+1}, URL: {url}, Text: {text}"
+            url_with_text = f"Source: {i+1}, URL: {url}, \n\n Text: {text}"
             final_output += url_with_text + "\n"
         return final_output
         
