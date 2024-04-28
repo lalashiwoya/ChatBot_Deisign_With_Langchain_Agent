@@ -5,13 +5,14 @@ from utils import init_llm, init_memory, convert_memory_to_str
 from llama_index.core import Settings
 from api.full_chain import init_full_chain
 from langchain.schema.runnable.config import RunnableConfig
+from utils import read_configs_from_toml
 
-MAX_TOKEN_LIMIT = 500
+configs = read_configs_from_toml("config.toml")
 
 @cl.on_chat_start
 async def on_chat_start():
     llm = init_llm()
-    memory = init_memory(llm, max_token_limit=MAX_TOKEN_LIMIT)
+    memory = init_memory(llm, max_token_limit=configs['memory']['max_token_limit'])
     full_chain = init_full_chain(llm)
     cl.user_session.set("full_chain", full_chain)
     cl.user_session.set("memory", memory)
