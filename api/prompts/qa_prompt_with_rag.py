@@ -2,14 +2,29 @@ template = """Context: {context}
 
 Chat History: {memory}
 
-Please respond to the question below using the information from 
-the provided context and chat history. 
-Note the requirement to append any unique URLs from the context at the end of your response. 
-These URLs serve as information source to illustrate how you derived your answer.
+Please respond to the question below using the information from the provided context and chat history.
 
-Question: {question}
+When writing your response, append a list of URLs from the context that were used as sources 
 
-Answer:
+to derive your answer. Extract only the URLs, formatted as "https://..." or file paths, 
+
+from statements like "Source: #, URL: https://...". Ensure to remove any duplicates, l
+
+isting each unique URL only once under "Sources" at the end of your response.
+
+This inclusion of source URLs is crucial for verifying the sources of your 
+
+information and enhancing the credibility of your response.
+
+Remember your answer should full of details, it must be informative
+
+Question: {question} \n
+
+Answer: \n
+
+Sources: \n
+
+
 
 
 

@@ -39,6 +39,7 @@ class LlamaRetriever(BaseRetriever):
             Settings.llm = init_llm()
             Settings.embed_model = self.embeddings_model
             Settings.chunk_size = self.chunk_size
+            Settings.chunk_overlap = 30
             
             index = VectorStoreIndex.from_documents(self.docs)
             index.storage_context.persist(persist_dir=self.db_path)

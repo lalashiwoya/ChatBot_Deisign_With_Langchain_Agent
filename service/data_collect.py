@@ -8,6 +8,7 @@ from llama_index.readers.web import SimpleWebPageReader
 from langchain.chat_models import ChatOpenAI
 from utils import init_llm
 from llama_index.core import SimpleDirectoryReader
+from llama_index.readers.youtube_transcript import YoutubeTranscriptReader
 
 class DocumentRefiner:
     def __init__(self, llm: BaseChatModel,
@@ -99,7 +100,33 @@ class PdfPagesToDocuments(PagesToDocuments):
          if self.clean_texts:
             docs = self.text_cleaner.refine_html_files(docs)
          return docs
-        
+
+class YoutubePagesToDocuments(PagesToDocuments):
+      def __init__(self, path: str,
+                 clean_texts: bool = False,
+                 chunk_size:int = 3000,
+                 chunk_overlap:int = 0):
+        super().__init__(path, clean_texts, chunk_size, chunk_overlap)
+        self.docs = self.get_all_documents()
+     
+      def get_document_from_url(self, url:str) -> Document:
+            loader = YoutubeTranscriptReader()
+            doc = loader.load_data(
+                ytlinks=[url]
+            )[0]
+            doc.metadata['doc_id'] = url
+            return doc
+    
+      def get_all_documents(self) -> List[Document]:
+            docs = []
+            with open(self.path) as file:
+                urls = file.read().splitlines()
+            for url in urls:
+                docs.append(self.get_document_from_url(url))
+            
+            if self.clean_texts:
+                docs = self.text_cleaner.refine_html_files(docs)
+            return docs
          
 
 

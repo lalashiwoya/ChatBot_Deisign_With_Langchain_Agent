@@ -1,4 +1,4 @@
-from service.data_collect import WebPagesToDocuments, PdfPagesToDocuments
+from service.data_collect import WebPagesToDocuments, PdfPagesToDocuments, YoutubePagesToDocuments
 from llama_index.embeddings.openai import OpenAIEmbedding
 from service.llama_index_retrive import LlamaRetriever
 from utils import read_configs_from_toml
@@ -14,7 +14,9 @@ def get_retriever(path: str) -> LlamaRetriever:
                             clean_texts=configs["dataset"]["llm_finetune"]["if_clean_texts"]).docs
     pdf_docs = PdfPagesToDocuments(path = configs["dataset"]["llm_finetune"]["pdf_dir"],
                                    clean_texts=configs["dataset"]["llm_finetune"]["if_clean_texts"]).docs
-    docs = web_docs + pdf_docs
+    youtube_docs = YoutubePagesToDocuments(path = configs["dataset"]["llm_finetune"]["youtube_urls"], 
+                                           clean_texts=configs["dataset"]["llm_finetune"]["if_clean_texts"]).docs
+    docs = web_docs + pdf_docs + youtube_docs
     
 
     retriever = LlamaRetriever(db_path=configs["dataset"]["llm_finetune"]["db_path"],
