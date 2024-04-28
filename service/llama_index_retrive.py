@@ -8,6 +8,7 @@ from llama_index.core import Settings
 from llama_index.core import StorageContext, load_index_from_storage, VectorStoreIndex
 import os
 from langchain.chat_models import ChatOpenAI
+from utils import init_llm
 
 class LlamaRetriever(BaseRetriever):
     embeddings_model: BaseEmbedding
@@ -35,7 +36,7 @@ class LlamaRetriever(BaseRetriever):
         
         if not os.path.exists(self.db_path) or os.path.getsize(self.db_path) == 0:
             
-            Settings.llm = ChatOpenAI(temperature=0, model_name = "gpt-3.5-turbo", streaming = True)
+            Settings.llm = init_llm()
             Settings.embed_model = self.embeddings_model
             Settings.chunk_size = self.chunk_size
             

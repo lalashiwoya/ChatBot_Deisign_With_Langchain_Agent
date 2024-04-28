@@ -6,7 +6,7 @@ from llama_index.core.schema import Document
 from llama_index.core.node_parser import SentenceSplitter
 from llama_index.readers.web import SimpleWebPageReader
 from langchain.chat_models import ChatOpenAI
-
+from utils import init_llm
 
 class DocumentRefiner:
     def __init__(self, llm: BaseChatModel,
@@ -45,7 +45,6 @@ class DocumentRefiner:
 
 class WebPagesToDocuments:
     def __init__(self, path: str,
-                 llm: BaseChatModel = ChatOpenAI(temperature=0, model_name = "gpt-3.5-turbo", streaming = True),
                  clean_texts: bool = False,
                  chunk_size:int = 3000,
                  chunk_overlap:int = 0):
@@ -53,7 +52,7 @@ class WebPagesToDocuments:
         self.clean_texts = clean_texts
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
-        self.llm = llm
+        self.llm = init_llm()
         self.docs = self.get_all_documents_from_url_file()
     
     def get_document_from_url(self, url:str) -> Document:
