@@ -3,3 +3,5 @@ __pycache__*
 *.ipynb
 !chain_usage*
 cookbook
+llama_models
+llama3

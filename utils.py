@@ -4,9 +4,19 @@ from langchain_core.memory import BaseMemory
 from langchain.chat_models.base import  BaseChatModel
 from llama_index.llms.openai import OpenAI
 import toml
+from langchain_community.llms import LlamaCpp
 
 def init_llm(model_name = "gpt-3.5-turbo"):
-    llm = ChatOpenAI(temperature=0, model_name = model_name, streaming = True)
+    if "gpt" in model_name:
+        llm = ChatOpenAI(temperature=0, model_name = model_name, streaming = True)
+    # elif "llama" in model_name:
+    
+    #     llm = LlamaCpp(
+    #     model_path="llama_models/llama-2-7b-chat.Q4_0.gguf",
+    #     temperature=0,
+    #     verbose=True,   
+    #     streaming = True
+    # )
     return llm
 
 def init_llm_for_llama_index(model_name = "gpt-3.5-turbo"):
