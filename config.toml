@@ -9,6 +9,7 @@ topics = ["Large Language Models (LLM) finetuning", "Explainable AI"]
 top_k = 3
 chunk_size = 300
 chunk_overlap = 30
+sentence_transformer = "text-embedding-3-small"
 
 [dataset.llm_finetune]
 dir = "data/llm_finetune"

@@ -1,10 +1,9 @@
 from service.data_collect import WebPagesToDocuments, PdfPagesToDocuments, YoutubePagesToDocuments
-from llama_index.embeddings.openai import OpenAIEmbedding
+# from llama_index.embeddings.openai import OpenAIEmbedding
 from service.llama_index_retrive import RouterLlamaRetriever, get_single_retriever
-from utils import read_configs_from_toml
+from utils import read_configs_from_toml, init_sentence_embedding
 
-
-def get_retriever_from_a_single_domain(configs, key_word):
+def collect_docs_from_a_single_domain(configs, key_word):
     try:
         clean_texts=configs["dataset"][key_word]["if_clean_texts"]
     except:
@@ -15,7 +14,7 @@ def get_retriever_from_a_single_domain(configs, key_word):
         web_docs = WebPagesToDocuments(path = path, 
                             clean_texts=clean_texts).docs
     except:
-        print("You don't have any resources from the web page")
+        print(f"You don't have any resources from the web page regarding {key_word}")
         web_docs = []
         
     try:
@@ -23,7 +22,7 @@ def get_retriever_from_a_single_domain(configs, key_word):
         pdf_docs = PdfPagesToDocuments(path = path,
                                    clean_texts=clean_texts).docs
     except:
-        print("You don't have any resources from the local pdfs")
+        print(f"You don't have any resources from the local pdfs regarding {key_word}")
         pdf_docs = []
     
     try:
@@ -31,14 +30,24 @@ def get_retriever_from_a_single_domain(configs, key_word):
         youtube_docs = YoutubePagesToDocuments(path = path,
                                    clean_texts=clean_texts).docs
     except:
-        print("You don't have any resources from the youtube subtitles")
+        print(f"You don't have any resources from the youtube subtitles regarding {key_word}")
         youtube_docs = [] 
     docs = web_docs + pdf_docs + youtube_docs
     
     if len(docs) > 0:
         return docs
     else:
-        raise ValueError("No resource found for your qa chain")
+        raise ValueError(f"No resource found for your qa chain regarding {key_word}")
+
+
+def build_retriever_from_source_path(configs, key_word):
+    docs = collect_docs_from_a_single_domain(configs, key_word)
+    retriever = get_single_retriever(db_path=configs["dataset"][key_word]["db_path"],
+                            chunk_size = configs["llama_index"]["chunk_size"],
+                            embeddings_model=init_sentence_embedding(configs["llama_index"]["sentence_transformer"]),
+                            chunk_overlap=configs["llama_index"]["chunk_overlap"],
+                            docs = docs)
+    return retriever
         
         
 
@@ -48,19 +57,21 @@ def get_router_retriever(path: str):
 
     # path = "data/llm_finetune/urls/urls.txt"
     # if_clean_texts = False
-    llm_docs = get_retriever_from_a_single_domain(configs, "llm_finetune")
-    llm_retriever = get_single_retriever(db_path=configs["dataset"]["llm_finetune"]["db_path"],
-                            chunk_size = configs["llama_index"]["chunk_size"],
-                            embeddings_model=OpenAIEmbedding(model="text-embedding-3-small"),
-                            chunk_overlap=configs["llama_index"]["chunk_overlap"],
-                            docs = llm_docs)
+    # llm_docs = collect_docs_from_a_single_domain(configs, "llm_finetune")
+    # llm_retriever = get_single_retriever(db_path=configs["dataset"]["llm_finetune"]["db_path"],
+    #                         chunk_size = configs["llama_index"]["chunk_size"],
+    #                         embeddings_model=init_sentence_embedding(),
+    #                         chunk_overlap=configs["llama_index"]["chunk_overlap"],
+    #                         docs = llm_docs)
+    llm_retriever = build_retriever_from_source_path(configs, "llm_finetune") 
     llm_retriever_description = "Will retrieve all context regarding llm finetuning"
     
-    explainable_ai_docs = get_retriever_from_a_single_domain(configs, "explainable_ai")
-    explainable_ai_retriever = get_single_retriever(db_path=configs["dataset"]["explainable_ai"]["db_path"],
-                            chunk_size = configs["llama_index"]["chunk_size"],
-                            embeddings_model=OpenAIEmbedding(model="text-embedding-3-small"),
-                            docs = explainable_ai_docs)
+    # explainable_ai_docs = collect_docs_from_a_single_domain(configs, "explainable_ai")
+    # explainable_ai_retriever = get_single_retriever(db_path=configs["dataset"]["explainable_ai"]["db_path"],
+    #                         chunk_size = configs["llama_index"]["chunk_size"],
+    #                         embeddings_model=init_sentence_embedding(),
+    #                         docs = explainable_ai_docs)
+    explainable_ai_retriever = build_retriever_from_source_path(configs, "explainable_ai")
     explainable_ai_description = "Will retrieve all context regarding explainable ai"
     
     router_retriver = RouterLlamaRetriever([llm_retriever, explainable_ai_retriever],

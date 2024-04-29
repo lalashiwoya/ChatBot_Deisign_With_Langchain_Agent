@@ -5,7 +5,7 @@ from langchain.chat_models.base import  BaseChatModel
 from llama_index.core.schema import Document
 from llama_index.core.node_parser import SentenceSplitter
 from llama_index.readers.web import SimpleWebPageReader
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from utils import init_llm
 from llama_index.core import SimpleDirectoryReader
 from llama_index.readers.youtube_transcript import YoutubeTranscriptReader

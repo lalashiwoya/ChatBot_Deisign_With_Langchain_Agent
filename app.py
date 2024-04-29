@@ -1,6 +1,6 @@
 
 import chainlit as cl
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from utils import init_llm, init_memory
 from llama_index.core import Settings
 from api.full_chain import init_full_chain

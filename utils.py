@@ -1,10 +1,11 @@
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from langchain.memory import ConversationBufferMemory, ConversationSummaryBufferMemory, ConversationTokenBufferMemory
 from langchain_core.memory import BaseMemory
 from langchain.chat_models.base import  BaseChatModel
 from llama_index.llms.openai import OpenAI
 import toml
-from langchain_community.llms import LlamaCpp
+# from langchain_community.llms import LlamaCpp
+from llama_index.embeddings.openai import OpenAIEmbedding
 
 def init_llm(model_name = "gpt-3.5-turbo"):
     if "gpt" in model_name:
@@ -39,5 +40,8 @@ def read_configs_from_toml(path: str) -> dict:
     with open(path, 'r') as toml_file:
         data = toml.load(toml_file)
     return data
+
+def init_sentence_embedding(model_name = "text-embedding-3-small"):
+    return OpenAIEmbedding(model=model_name)
 
  
