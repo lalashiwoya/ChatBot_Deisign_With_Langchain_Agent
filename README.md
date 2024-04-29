@@ -32,9 +32,10 @@ Users have the option to select the specific LLM (language learning model) they 
 
 
 ### QA with RAG
-- **Information Source**: The chatbot can retrieve information from web pages, YouTube videos, and PDFs.
+- **Various Information Source**: The chatbot can retrieve information from web pages, YouTube videos, and PDFs.
 - **Source Display**: You can view the source of the information at the end of each answer.
 - **LLM Model Identification**:  The specific LLM model utilized for generating the current response is indicated.
+- **Router retriever**: Easy to adapt to different domains, as each domain can be equipped with a different retriever.
 
 ### Conversation Memory
 - **Memory Management**: The chatbot is equipped with a conversation memory feature. If the memory exceeds 500 tokens, it is automatically summarized.
