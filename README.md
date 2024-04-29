@@ -44,7 +44,7 @@ Users have the option to select the specific LLM (language learning model) they 
 
 Below is a preview of the web interface for the chatbot:
 
-![Web Page](images/web.gif)
+![Web Page](images/present_web.gif)
 
 ## Configuration
 
