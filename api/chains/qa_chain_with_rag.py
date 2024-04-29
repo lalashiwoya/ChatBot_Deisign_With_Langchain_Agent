@@ -13,6 +13,7 @@ def create_llm_finetun_chain(llm):
     chain = (
         {"question": itemgetter("question"),
         "context": retriever,
+        "model_name": lambda x: x["user_settings"].llm_model_name,
         "memory": itemgetter("memory")} |
         ChatPromptTemplate.from_template(template) |
         llm |

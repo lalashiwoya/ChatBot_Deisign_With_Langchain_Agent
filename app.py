@@ -6,21 +6,32 @@ from llama_index.core import Settings
 from api.full_chain import init_full_chain
 from langchain.schema.runnable.config import RunnableConfig
 from utils import read_configs_from_toml
+from api.settings import init_settings, update_user_session
 
 configs = read_configs_from_toml("config.toml")
 
 @cl.on_chat_start
 async def on_chat_start():
-    llm = init_llm()
+    initial_settings = init_settings()
+    settings = await cl.ChatSettings(initial_settings).send()
+    update_user_session(settings)
+    llm = init_llm(cl.user_session.get("user_settings").llm_model_name)
     memory = init_memory(llm, max_token_limit=configs['memory']['max_token_limit'])
-    full_chain = init_full_chain(llm)
-    cl.user_session.set("full_chain", full_chain)
+    # full_chain = init_full_chain(llm)
+    
+    # cl.user_session.set("full_chain", full_chain)
     cl.user_session.set("memory", memory)
+    # cl.user_session.set("llm", llm)
 
 @cl.on_message
 async def on_message(message: cl.Message):
+    user_settings = cl.user_session.get("user_settings")
+    # llm = init_llm(user_settings.llm_model_name)
     full_chain = cl.user_session.get("full_chain")
+    # full_chain = cl.user_session.get("full_chain")
     memory = cl.user_session.get("memory")
+    
+    # print(user_settings.llm_model_name)
     elements = []
     actions = []
     res = cl.Message(content="", elements=elements, actions=actions)
@@ -29,6 +40,7 @@ async def on_message(message: cl.Message):
         {
             "question": message.content,
             "memory": memory,
+            "user_settings": user_settings
              
         },
         config=RunnableConfig(callbacks=[cl.LangchainCallbackHandler()]),

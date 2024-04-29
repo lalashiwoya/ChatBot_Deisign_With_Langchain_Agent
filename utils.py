@@ -4,8 +4,8 @@ from langchain_core.memory import BaseMemory
 from langchain.chat_models.base import  BaseChatModel
 import toml
 
-def init_llm():
-    llm = ChatOpenAI(temperature=0, model_name = "gpt-3.5-turbo", streaming = True)
+def init_llm(model_name = "gpt-3.5-turbo"):
+    llm = ChatOpenAI(temperature=0, model_name = model_name, streaming = True)
     return llm
 
 def init_memory(llm: BaseChatModel, max_token_limit:int = 500):

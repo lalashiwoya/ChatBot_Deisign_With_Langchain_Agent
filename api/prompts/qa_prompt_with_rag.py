@@ -16,14 +16,17 @@ This inclusion of source URLs is crucial for verifying the sources of your
 
 information and enhancing the credibility of your response.
 
-Remember your answer should full of details, it must be informative
+Remember your answer should full of details, it must be informative.
 
 Question: {question} \n
 
+Strictly follow the Output structure:\n
+
+Model: {model_name} \n
+
 Answer: \n
 
-Sources: \n
-
+Sources:
 
 
 
