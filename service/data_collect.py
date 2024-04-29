@@ -96,7 +96,7 @@ class PdfPagesToDocuments(PagesToDocuments):
       def get_all_documents(self) -> List[Document]:
          docs = SimpleDirectoryReader(self.path).load_data()
          for doc in docs:
-            doc.metadata['doc_id'] = doc.metadata['file_name']
+            doc.metadata['doc_id'] = doc.metadata['file_path']
          if self.clean_texts:
             docs = self.text_cleaner.refine_html_files(docs)
          return docs

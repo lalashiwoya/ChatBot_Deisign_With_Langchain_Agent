@@ -18,11 +18,16 @@ information and enhancing the credibility of your response.
 
 Remember your answer should full of details, it must be informative.
 
+Remember to forget the answer to the same question in the chat History.
+
 Question: {question} \n
 
 Strictly follow the Output structure:\n
 
-Model: {model_name} \n
+Example Output: "LLM Model used to generate this answer: {model_name}\n
+Answer: Finetune is ... \n Sources: https://..\n"
+
+LLM Model used to generate this answer: {model_name} \n
 
 Answer: \n
 

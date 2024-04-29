@@ -13,3 +13,9 @@ db_path = "data/llm_finetune/db"
 pdf_dir = "data/llm_finetune/pdfs/"
 youtube_urls = "data/llm_finetune/youtube_urls/urls.txt"
 
+[dataset.explainable_ai]
+dir = "data/explainable_ai"
+if_clean_texts = false
+url_path = "data/explainable_ai/web_text_urls/urls.txt"
+db_path = "data/explainable_ai/db"
+

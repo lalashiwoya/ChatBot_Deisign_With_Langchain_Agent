@@ -1,26 +1,91 @@
 from service.data_collect import WebPagesToDocuments, PdfPagesToDocuments, YoutubePagesToDocuments
 from llama_index.embeddings.openai import OpenAIEmbedding
-from service.llama_index_retrive import LlamaRetriever
+from service.llama_index_retrive import RouterLlamaRetriever, get_single_retriever
 from utils import read_configs_from_toml
 
-def get_retriever(path: str) -> LlamaRetriever:
+
+def get_retriever_from_a_single_domain(configs, key_word):
+    try:
+        clean_texts=configs["dataset"][key_word]["if_clean_texts"]
+    except:
+        print("You don't specify if you want to clean the original texts or not in the configuration file")
+    
+    try: 
+        path = configs["dataset"][key_word]["url_path"]
+        web_docs = WebPagesToDocuments(path = path, 
+                            clean_texts=clean_texts).docs
+    except:
+        print("You don't have any resources from the web page")
+        web_docs = []
+        
+    try:
+        path = configs["dataset"][key_word]["pdf_dir"]
+        pdf_docs = PdfPagesToDocuments(path = path,
+                                   clean_texts=clean_texts).docs
+    except:
+        print("You don't have any resources from the local pdfs")
+        pdf_docs = []
+    
+    try:
+        path = configs["dataset"][key_word]["youtube_urls"]
+        youtube_docs = YoutubePagesToDocuments(path = path,
+                                   clean_texts=clean_texts).docs
+    except:
+        print("You don't have any resources from the youtube subtitles")
+        youtube_docs = [] 
+    docs = web_docs + pdf_docs + youtube_docs
+    
+    if len(docs) > 0:
+        return docs
+    else:
+        raise ValueError("No resource found for your qa chain")
+        
+        
+
+def get_router_retriever(path: str):
 
     configs = read_configs_from_toml(path)
 
     # path = "data/llm_finetune/urls/urls.txt"
     # if_clean_texts = False
-
-    web_docs = WebPagesToDocuments(path = configs["dataset"]["llm_finetune"]["url_path"], 
-                            clean_texts=configs["dataset"]["llm_finetune"]["if_clean_texts"]).docs
-    pdf_docs = PdfPagesToDocuments(path = configs["dataset"]["llm_finetune"]["pdf_dir"],
-                                   clean_texts=configs["dataset"]["llm_finetune"]["if_clean_texts"]).docs
-    youtube_docs = YoutubePagesToDocuments(path = configs["dataset"]["llm_finetune"]["youtube_urls"], 
-                                           clean_texts=configs["dataset"]["llm_finetune"]["if_clean_texts"]).docs
-    docs = web_docs + pdf_docs + youtube_docs
-    
-
-    retriever = LlamaRetriever(db_path=configs["dataset"]["llm_finetune"]["db_path"],
+    llm_docs = get_retriever_from_a_single_domain(configs, "llm_finetune")
+    llm_retriever = get_single_retriever(db_path=configs["dataset"]["llm_finetune"]["db_path"],
                             chunk_size = configs["llama_index"]["chunk_size"],
                             embeddings_model=OpenAIEmbedding(model="text-embedding-3-small"),
-                            docs = docs)
-    return retriever
+                            docs = llm_docs)
+    llm_retriever_description = "Will retrieve all context regarding llm finetuning"
+    
+    explainable_ai_docs = get_retriever_from_a_single_domain(configs, "explainable_ai")
+    explainable_ai_retriever = get_single_retriever(db_path=configs["dataset"]["explainable_ai"]["db_path"],
+                            chunk_size = configs["llama_index"]["chunk_size"],
+                            embeddings_model=OpenAIEmbedding(model="text-embedding-3-small"),
+                            docs = explainable_ai_docs)
+    explainable_ai_description = "Will retrieve all context regarding explainable ai"
+    
+    router_retriver = RouterLlamaRetriever([llm_retriever, explainable_ai_retriever],
+                                     [llm_retriever_description, explainable_ai_description])
+    # relevant_docs = router_retriver.get_relevant_documents(query)
+    return router_retriver
+    
+
+    # llm_web_docs = WebPagesToDocuments(path = configs["dataset"]["llm_finetune"]["url_path"], 
+    #                         clean_texts=configs["dataset"]["llm_finetune"]["if_clean_texts"]).docs
+    # llm_pdf_docs = PdfPagesToDocuments(path = configs["dataset"]["llm_finetune"]["pdf_dir"],
+    #                                clean_texts=configs["dataset"]["llm_finetune"]["if_clean_texts"]).docs
+    # llm_youtube_docs = YoutubePagesToDocuments(path = configs["dataset"]["llm_finetune"]["youtube_urls"], 
+    #                                        clean_texts=configs["dataset"]["llm_finetune"]["if_clean_texts"]).docs
+    
+    # llm_docs = llm_web_docs + llm_pdf_docs + llm_youtube_docs
+    
+
+    # llm_retriever = get_single_retriever(db_path=configs["dataset"]["llm_finetune"]["db_path"],
+    #                         chunk_size = configs["llama_index"]["chunk_size"],
+    #                         embeddings_model=OpenAIEmbedding(model="text-embedding-3-small"),
+    #                         docs = llm_docs)
+    # llm_retriever_description = "Will retrieve all context regarding llm finetuning"
+    
+    
+    # router_retriver = RouterLlamaRetriever([llm_retriever],
+    #                                  [llm_retriever_description])
+    # # relevant_docs = router_retriver.get_relevant_documents(query)
+    # return router_retriver

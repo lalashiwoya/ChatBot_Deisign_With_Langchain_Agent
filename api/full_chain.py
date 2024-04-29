@@ -6,7 +6,7 @@ from langchain_core.runnables import (
     RunnableLambda, 
     
 )
-from utils import load_memory_as_str
+from utils import custom_load_memory
 from operator import itemgetter
 
 def init_full_chain(llm):
@@ -18,9 +18,9 @@ def init_full_chain(llm):
         {"category": classification_chain,
          "question": itemgetter("question"),
          "user_settings": itemgetter("user_settings"),
-         "memory": {"memory": itemgetter("memory") | RunnableLambda(load_memory_as_str)},
+         "memory": {"memory": itemgetter("memory") | RunnableLambda(custom_load_memory)},
          } | RunnableBranch(
-             (lambda x: "llm" in x['category'].lower(), qa_chain),
+             (lambda x: "qa" in x['category'].lower(), qa_chain),
              (lambda x: "other" in x['category'].lower(), off_topic_chain),
              off_topic_chain
          ) 
