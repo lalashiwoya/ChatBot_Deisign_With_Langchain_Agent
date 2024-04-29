@@ -52,6 +52,7 @@ def get_router_retriever(path: str):
     llm_retriever = get_single_retriever(db_path=configs["dataset"]["llm_finetune"]["db_path"],
                             chunk_size = configs["llama_index"]["chunk_size"],
                             embeddings_model=OpenAIEmbedding(model="text-embedding-3-small"),
+                            chunk_overlap=configs["llama_index"]["chunk_overlap"],
                             docs = llm_docs)
     llm_retriever_description = "Will retrieve all context regarding llm finetuning"
     
