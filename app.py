@@ -40,7 +40,8 @@ async def on_message(message: cl.Message):
         {
             "question": message.content,
             "memory": memory,
-            "user_settings": user_settings
+            "user_settings": user_settings,
+            "topics": "\n".join(configs["topics"]["topics"])
              
         },
         config=RunnableConfig(callbacks=[cl.LangchainCallbackHandler()]),

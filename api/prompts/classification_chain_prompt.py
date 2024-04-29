@@ -1,8 +1,9 @@
+
+
 template = """
 
-topics: 
-    - Large Language Models (LLM) finetuning, 
-    - explainable ai
+topics: {topics}
+     
 
 As a QA system equipped to handle user interactions related to 
 topics, your task is to evaluate and 
@@ -11,6 +12,8 @@ classify each question as 'General QA' if it directly relates to any of the topi
 
 If the question is not about any of the topics, 
 classify it as 'Other'.
+
+Remember there are only two categories: 'General QA' and 'Other'
 
 Utilize the chat history "{memory}" to better understand the context of 
 

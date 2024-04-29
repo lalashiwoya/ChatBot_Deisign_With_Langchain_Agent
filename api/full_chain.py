@@ -18,6 +18,7 @@ def init_full_chain(llm):
         {"category": classification_chain,
          "question": itemgetter("question"),
          "user_settings": itemgetter("user_settings"),
+         "topics": itemgetter("topics"),
          "memory": {"memory": itemgetter("memory") | RunnableLambda(custom_load_memory)},
          } | RunnableBranch(
              (lambda x: "qa" in x['category'].lower(), qa_chain),
