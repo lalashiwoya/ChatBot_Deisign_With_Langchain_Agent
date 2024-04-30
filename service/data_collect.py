@@ -49,6 +49,7 @@ class PagesToDocuments:
                  chunk_size: int = 3000,
                  chunk_overlap: int = 0):
         self.path = path
+        
         self.llm = init_llm()
         self.text_cleaner = DocumentRefiner(self.llm, 
                                             chunk_size= chunk_size,
@@ -114,6 +115,7 @@ class YoutubePagesToDocuments(PagesToDocuments):
             doc = loader.load_data(
                 ytlinks=[url]
             )[0]
+            
             doc.metadata['doc_id'] = url
             return doc
     

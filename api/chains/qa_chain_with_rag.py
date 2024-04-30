@@ -7,9 +7,10 @@ from llama_index.embeddings.openai import OpenAIEmbedding
 from api.utils import get_router_retriever
 from langchain_core.runnables import RunnableLambda
 
-
-
 retriever = get_router_retriever(path = "config.toml")
+
+
+
 def create_llm_finetun_chain(llm):
     chain = (
         {"question": itemgetter("question"),

@@ -24,7 +24,7 @@ def get_single_retriever(db_path: str,
                   chunk_overlap: int=30,
                   top_k: int=3
                   ) -> BaseRetriever:
-    Settings.llm = init_llm_for_llama_index()
+    # Settings.llm = init_llm_for_llama_index()
     Settings.embed_model = embeddings_model
     Settings.chunk_size = chunk_size
     Settings.chunk_overlap = chunk_overlap

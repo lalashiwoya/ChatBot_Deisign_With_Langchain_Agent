@@ -8,6 +8,7 @@ import toml
 from llama_index.embeddings.openai import OpenAIEmbedding
 
 def init_llm(model_name = "gpt-3.5-turbo"):
+    print("r"*10)
     if "gpt" in model_name:
         llm = ChatOpenAI(temperature=0, model_name = model_name, streaming = True)
     # elif "llama" in model_name:
@@ -18,13 +19,14 @@ def init_llm(model_name = "gpt-3.5-turbo"):
     #     verbose=True,   
     #     streaming = True
     # )
+    print("r"*10)
     return llm
 
-def init_llm_for_llama_index(model_name = "gpt-3.5-turbo"):
+def init_llm_for_llama_index(model_name: str= "gpt-3.5-turbo"):
     llm = OpenAI(temperature=0, model_name = model_name, streaming = True)
     return llm
 
-def init_memory(llm: BaseChatModel, max_token_limit:int = 500):
+def init_memory(llm: BaseChatModel, max_token_limit:int = 500) -> BaseMemory:
     # memory = ConversationBufferMemory(return_messages = True)
     memory = ConversationSummaryBufferMemory(return_messages = True,
                                             max_token_limit= max_token_limit,
@@ -44,4 +46,6 @@ def read_configs_from_toml(path: str) -> dict:
 def init_sentence_embedding(model_name = "text-embedding-3-small"):
     return OpenAIEmbedding(model=model_name)
 
+ 
+        
  

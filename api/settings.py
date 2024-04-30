@@ -32,6 +32,8 @@ def update_user_session(settings):
     llm = init_llm(user_settings.llm_model_name)
     full_chain = init_full_chain(llm)
     if user_settings is not None:
+        print("ww"*20)
+        print(user_settings)
         cl.user_session.set("user_settings", user_settings)
         cl.user_session.set("full_chain", full_chain)
         

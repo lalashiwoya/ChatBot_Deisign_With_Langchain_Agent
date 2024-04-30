@@ -3,29 +3,24 @@
 template = """
 
 topics: {topics}
-     
 
-As a QA system equipped to handle user interactions related to 
-topics, your task is to evaluate and 
-categorize user inquiries. With the context provided by the chat history, 
-classify each question as 'General QA' if it directly relates to any of the topics. 
+Question: "{question}"
 
-If the question is not about any of the topics, 
-classify it as 'Other'.
+As a QA system focused on specified topics, your task is to evaluate and categorize each user inquiry. 
 
-Remember there are only two categories: 'General QA' and 'Other'
+Utilize the chat history provided in "{memory}" to determine the relevance of the question . 
+This context is crucial, especially if the question uses pronouns like "it," "this," or "that," 
+which may refer to a topic from the memory.
 
-Utilize the chat history "{memory}" to better understand the context of 
+Classify the question as:
+- 'General QA' if it directly relates to the topics.
+- 'Other' if it does not pertain to the topics.
 
-the current question, as it may contain key information that determines 
+Pay special attention to grammatical variations and similar phrases of the topics discussed
 
-whether "it," "this," or "that" in the user's query is referencing any of the topics.
+Only the classifications 'General QA' or 'Other' are permitted. No other answer should be used.
 
-Please review the user's question and assign the appropriate category:
 
-Current Question: "{question}"
-
-Classification:
-
+Answer:\n
 
 """

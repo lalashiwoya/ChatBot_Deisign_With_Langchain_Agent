@@ -1,16 +1,21 @@
-template = """Context: {context}
+template = """
+Question: {question} \n
+
+Context: {context}
 
 Chat History: {memory}
 
-Please respond to the question below using the information from the provided context and chat history.
+LLM Model Name: {model_name}
 
-When writing your response, append a list of URLs from the context that were used as sources 
+If you see the answers to the current question by different LLM Models in the chat History, 
 
-to derive your answer. Extract only the URLs, formatted as "https://..." or file paths, 
+you have to forget these answers from your memory, otherwise it's cheating!
 
-from statements like "Source: #, URL: https://...". Ensure to remove any duplicates, l
+Please respond to the question below using the information from the provided "Context" and "Chat History".
 
-isting each unique URL only once under "Sources" at the end of your response.
+When writing your response, append a list of URLs or file path from the "Context" that were used as sources 
+
+to derive your answer. Ensure to remove any duplicates, listing each unique URL or file path only once under "Sources" at the end of your response.
 
 This inclusion of source URLs is crucial for verifying the sources of your 
 
@@ -18,14 +23,15 @@ information and enhancing the credibility of your response.
 
 Remember your answer should full of details, it must be informative.
 
-Remember to forget the answer to the same question in the chat History.
 
-Question: {question} \n
+
+
+
+
 
 Strictly follow the Output structure:\n
 
-Example Output: "LLM Model used to generate this answer: {model_name}\n
-Answer: Finetune is ... \n Sources: https://..\n"
+Example Output: "LLM Model used to generate this answer: {model_name}\n Answer: xxx \n Sources: xxx\n"
 
 LLM Model used to generate this answer: {model_name} \n
 
