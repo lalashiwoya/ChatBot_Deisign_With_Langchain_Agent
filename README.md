@@ -50,7 +50,7 @@ To evaluate model generation against human references or log outputs for specifi
    ```bash
    python langsmith_tract.py --dataset_name <YOUR DATASET NAME>
    ```
-4. Modify the data path in langsmith_evaluation/config.toml if necessary (e.g., path to a CSV file with question and answer pairs).
+4. Modify the data path in `langsmith_evaluation/config.toml` if necessary (e.g., path to a CSV file with question and answer pairs).
 <img src="images/langsmith-correctness.png" alt="Langsmith" width="50%">
 
 ### Recording Human Feedback with Literal AI
