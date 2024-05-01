@@ -7,8 +7,23 @@ from api.full_chain import init_full_chain
 from langchain.schema.runnable.config import RunnableConfig
 from utils import read_configs_from_toml
 from api.settings import init_settings, update_user_session
+import os
+
+from dotenv import load_dotenv
+load_dotenv()
 
 configs = read_configs_from_toml("config.toml")
+
+@cl.password_auth_callback
+def auth_callback(username: str, password: str):
+    test_username = os.getenv("APP_LOGIN_USERNAME")
+    test_password = os.getenv("APP_LOGIN_PASSWORD")
+    if (username, password) == (test_username, test_password):
+        return cl.User(
+            identifier="admin"
+        )
+    else:
+        return None
 
 @cl.on_chat_start
 async def on_chat_start():

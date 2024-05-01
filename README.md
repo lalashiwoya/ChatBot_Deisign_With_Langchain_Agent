@@ -28,6 +28,7 @@ chainlit run app.py
 
 ### User Setting Panel
 Users have the option to select the specific LLM (language learning model) they prefer for generating responses. The switch between different LLMs can be accomplished within a single conversation session.
+
 <img src="images/setting_panel.png" alt="Setting Panel" width="50%">
 
 
@@ -59,9 +60,28 @@ Use Literal AI to record human feedback for each generated answer. Follow these 
 1. Register an account at [Literal AI](https://cloud.getliteral.ai/).
 2. Add your `LITERAL_API_KEY` to the `.env` file.
 3. Once the `LITERAL_API_KEY` is added to your environment, run the command `chainlit run app.py`. You will see three new icons as shown in the image below, where you can leave feedback on the generated answers.
+
 <img src="images/literal_ai_web.png" alt="Literal_AI_Web" width="50%">
+
 4. Track this human feedback in your Literal AI account. You can also view the prompts or intermediate steps used to generate these answers.
+
 <img src="images/literal_ai_backend.png" alt="Literal_AI_Web" width="50%">
+
+### User Authentication and User Past Chat Setup
+
+This guide details the steps for setting up user authentication in your application. Each authenticated user will have the ability to view their own past interactions with the chatbot.
+
+1. Add your APP_LOGIN_USERNAME and APP_LOGIN_PASSWORD to the `.env` file.
+2. Run the following command to create a secret which is essential for securing user sessions:
+   ```bash
+   chainlit create-secret
+   ```
+   Copy the outputted CHAINLIT_AUTH_SECRET and add it to your .env file
+3. Once you launch your application, you will see a login authentication page
+4. Login with your APP_LOGIN_USERNAME and APP_LOGIN_PASSWORD
+5. Upon successful login, each user will be directed to a page displaying their personal chat history with the chatbot.
+![Web Page](images/user_auth_past_chat.gif)
+
 
 ## Presentation
 
