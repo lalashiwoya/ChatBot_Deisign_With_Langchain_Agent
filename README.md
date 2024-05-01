@@ -40,17 +40,7 @@ Users have the option to select the specific LLM (language learning model) they 
 ### Conversation Memory
 - **Memory Management**: The chatbot is equipped with a conversation memory feature. If the memory exceeds 500 tokens, it is automatically summarized.
 
-## Presentation
-
-Below is a preview of the web interface for the chatbot:
-
-![Web Page](images/present_web.gif)
-
-## Configuration
-
-To customize the chatbot according to your needs, define your configurations in the `config.toml` file.
-
-## Langsmith Evaluation
+### Langsmith Evaluation
 
 To evaluate model generation against human references or log outputs for specific test queries, use Langsmith.
 
@@ -62,3 +52,24 @@ To evaluate model generation against human references or log outputs for specifi
    ```
 4. Modify the data path in langsmith_evaluation/config.toml if necessary (e.g., path to a CSV file with question and answer pairs).
 <img src="images/langsmith-correctness.png" alt="Langsmith" width="50%">
+
+### Recording Human Feedback with Literal AI
+Use Literal AI to record human feedback for each generated answer. Follow these steps:
+
+1. Register an account at [Literal AI](https://cloud.getliteral.ai/).
+2. Add your `LITERAL_API_KEY` to the `.env` file.
+3. Once the `LITERAL_API_KEY` is added to your environment, run the command `chainlit run app.py`. You will see three new icons as shown in the image below, where you can leave feedback on the generated answers.
+<img src="images/literal_ai_web.png" alt="Literal_AI_Web" width="50%">
+4. Track this human feedback in your Literal AI account. You can also view the prompts or intermediate steps used to generate these answers.
+<img src="images/literal_ai_backend.png" alt="Literal_AI_Web" width="50%">
+
+## Presentation
+
+Below is a preview of the web interface for the chatbot:
+
+![Web Page](images/present_web.gif)
+
+## Configuration
+
+To customize the chatbot according to your needs, define your configurations in the `config.toml` file.
+
