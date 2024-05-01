@@ -11,7 +11,7 @@
     pip install -r requirements.txt
     ```
 3. **Set up environment variables**:
-    - Write your `OPENAI_API_KEY` in the `.env` file. A template can be found in `.env.example`.
+    - Write your `OPENAI_API_KEY` in the `.env` file. A template can be found in `.env.example`. 
     ```bash
     source .env
     ```
@@ -49,3 +49,16 @@ Below is a preview of the web interface for the chatbot:
 ## Configuration
 
 To customize the chatbot according to your needs, define your configurations in the `config.toml` file.
+
+## Langsmith Evaluation
+
+To evaluate model generation against human references or log outputs for specific test queries, use Langsmith.
+
+1. Register an account at [Langsmith](https://smith.langchain.com/).
+2. Add your `LANGCHAIN_API_KEY` to the `.env` file.
+3. Execute the script with your dataset name: 
+   ```bash
+   python langsmith_tract.py --dataset_name <YOUR DATASET NAME>
+   ```
+4. Modify the data path in langsmith_evaluation/config.toml if necessary (e.g., path to a CSV file with question and answer pairs).
+<img src="images/langsmith-correctness.png" alt="Langsmith" width="50%">
