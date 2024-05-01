@@ -80,6 +80,7 @@ This guide details the steps for setting up user authentication in your applicat
 3. Once you launch your application, you will see a login authentication page
 4. Login with your APP_LOGIN_USERNAME and APP_LOGIN_PASSWORD
 5. Upon successful login, each user will be directed to a page displaying their personal chat history with the chatbot.
+
 ![Web Page](images/user_auth_past_chat.gif)
 
 
