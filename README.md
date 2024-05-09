@@ -91,5 +91,6 @@ Below is a preview of the web interface for the chatbot:
 ![Web Page](images/present_web.gif)
 
 ## Configuration
+
 To customize the chatbot according to your needs, define your configurations in the `config.toml` file.
 
