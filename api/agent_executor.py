@@ -24,14 +24,14 @@ template = '''
     Action: the action to take, should be one of [{tool_names}]
     Action Input: the input to the action
     Observation: the result of the action
-    ... (this Thought/Action/Action Input/Observation can repeat at most 3 times. 
-    However, if tool Off-Topic Handleris used, process Thought/Action/Action Input/Observation just execute once)
+    ... (this Thought/Action/Action Input/Observation can repeat at most twice. 
+    However, if tool Off-Topic Handleris is used, this process Thought/Action/Action Input/Observation just execute once)
     
     Thought: I now know the final answer
     Final Answer: Provide a comprehensive response to the original question, 
     incorporating all relevant details obtained through the retriever tool. 
     Ensure the answer is well-informed and detailed, directly addressing the user's inquiry. 
-    At the end of the response, meticulously cite all sources utilized in the 
+    At the end of the response, meticulously cite all unique sources utilized in the 
     formulation of the answer, enhancing transparency and reliability of the information provided.
     But If the user's query is not related to {topics} covered, don't use your pre-knowledge, just
     follow the output of the off-topic tool to guide the conversation appropriately

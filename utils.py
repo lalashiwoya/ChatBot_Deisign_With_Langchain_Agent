@@ -6,10 +6,12 @@ from llama_index.llms.openai import OpenAI
 import toml
 # from langchain_community.llms import LlamaCpp
 from llama_index.embeddings.openai import OpenAIEmbedding
+from langchain.callbacks.streaming_stdout_final_only import FinalStreamingStdOutCallbackHandler
 
 def init_llm(model_name = "gpt-3.5-turbo"):
     if "gpt" in model_name:
-        llm = ChatOpenAI(temperature=0, model_name = model_name, streaming = True)
+        llm = ChatOpenAI(temperature=0, model_name = model_name, streaming = True,
+                         callbacks=[FinalStreamingStdOutCallbackHandler()])
     # elif "llama" in model_name:
     
     #     llm = LlamaCpp(
