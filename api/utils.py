@@ -4,15 +4,15 @@ from service.llama_index_retrive import RouterLlamaRetriever, get_single_retriev
 from utils import read_configs_from_toml, init_sentence_embedding
 
 def collect_docs_from_a_single_domain(configs, key_word):
-    try:
-        clean_texts=configs["dataset"][key_word]["if_clean_texts"]
-    except:
-        print("You don't specify if you want to clean the original texts or not in the configuration file")
+    # try:
+    #     clean_texts=configs["dataset"][key_word]["if_clean_texts"]
+    # except:
+    #     print("You don't specify if you want to clean the original texts or not in the configuration file")
     
     try: 
         path = configs["dataset"][key_word]["url_path"]
         web_docs = WebPagesToDocuments(path = path, 
-                            clean_texts=clean_texts).docs
+                            ).docs
     except:
         print(f"You don't have any resources from the web page regarding {key_word}")
         web_docs = []
@@ -20,7 +20,7 @@ def collect_docs_from_a_single_domain(configs, key_word):
     try:
         path = configs["dataset"][key_word]["pdf_dir"]
         pdf_docs = PdfPagesToDocuments(path = path,
-                                   clean_texts=clean_texts).docs
+                                   ).docs
     except:
         print(f"You don't have any resources from the local pdfs regarding {key_word}")
         pdf_docs = []
@@ -28,7 +28,7 @@ def collect_docs_from_a_single_domain(configs, key_word):
     try:
         path = configs["dataset"][key_word]["youtube_urls"]
         youtube_docs = YoutubePagesToDocuments(path = path,
-                                   clean_texts=clean_texts).docs
+                                   ).docs
     except:
         print(f"You don't have any resources from the youtube subtitles regarding {key_word}")
         youtube_docs = [] 
@@ -63,19 +63,33 @@ def get_router_retriever(path: str):
     #                         embeddings_model=init_sentence_embedding(),
     #                         chunk_overlap=configs["llama_index"]["chunk_overlap"],
     #                         docs = llm_docs)
-    llm_retriever = build_retriever_from_source_path(configs, "llm_finetune") 
-    llm_retriever_description = "Will retrieve all context regarding llm finetuning"
+    retrievers = []
+    descriptions = []
+    for topic in configs['dataset']:
+        docs = collect_docs_from_a_single_domain(configs, topic)
+        retriever = get_single_retriever(db_path=configs["dataset"][topic]["db_path"],
+                            chunk_size = configs["llama_index"]["chunk_size"],
+                            embeddings_model=init_sentence_embedding(),
+                            chunk_overlap=configs["llama_index"]["chunk_overlap"],
+                            docs = docs)
+        description = configs["dataset"][topic]["retriever_description"]
+        retrievers.append(retriever)
+        descriptions.append(description)
+       
+        
+    # llm_retriever = build_retriever_from_source_path(configs, "llm_finetune") 
+    # llm_retriever_description = "Will retrieve all context regarding llm finetuning"
     
-    # explainable_ai_docs = collect_docs_from_a_single_domain(configs, "explainable_ai")
-    # explainable_ai_retriever = get_single_retriever(db_path=configs["dataset"]["explainable_ai"]["db_path"],
-    #                         chunk_size = configs["llama_index"]["chunk_size"],
-    #                         embeddings_model=init_sentence_embedding(),
-    #                         docs = explainable_ai_docs)
-    explainable_ai_retriever = build_retriever_from_source_path(configs, "explainable_ai")
-    explainable_ai_description = "Will retrieve all context regarding explainable ai"
+    # # explainable_ai_docs = collect_docs_from_a_single_domain(configs, "explainable_ai")
+    # # explainable_ai_retriever = get_single_retriever(db_path=configs["dataset"]["explainable_ai"]["db_path"],
+    # #                         chunk_size = configs["llama_index"]["chunk_size"],
+    # #                         embeddings_model=init_sentence_embedding(),
+    # #                         docs = explainable_ai_docs)
+    # explainable_ai_retriever = build_retriever_from_source_path(configs, "explainable_ai")
+    # explainable_ai_description = "Will retrieve all context regarding explainable ai"
     
-    router_retriver = RouterLlamaRetriever([llm_retriever, explainable_ai_retriever],
-                                     [llm_retriever_description, explainable_ai_description])
+    router_retriver = RouterLlamaRetriever(retrievers,
+                                     descriptions)
     # relevant_docs = router_retriver.get_relevant_documents(query)
     return router_retriver
     

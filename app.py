@@ -3,10 +3,10 @@ import chainlit as cl
 from langchain_openai import ChatOpenAI
 from utils import init_llm, init_memory
 from llama_index.core import Settings
-from api.full_chain import init_full_chain
+from legacy_api.full_chain import init_full_chain
 from langchain.schema.runnable.config import RunnableConfig
 from utils import read_configs_from_toml
-from api.settings import init_settings, update_user_session
+from legacy_api.settings import init_settings, update_user_session
 import os
 
 from dotenv import load_dotenv

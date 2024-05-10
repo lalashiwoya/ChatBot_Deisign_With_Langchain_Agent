@@ -6,7 +6,7 @@ from utils import read_configs_from_toml, init_memory, init_llm
 from langsmith_evaluation.langsmith_dataset import create_langsmith_dataset
 from langsmith import Client
 from langsmith_evaluation.langsmith_dataset import create_sample_topics, create_sample_user_settings
-from api.full_chain import init_full_chain
+from legacy_api.full_chain import init_full_chain
 from langsmith.schemas import Run, Example
 from llama_index.core.evaluation import CorrectnessEvaluator
 import nest_asyncio

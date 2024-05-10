@@ -1,5 +1,5 @@
 from typing import List, Tuple
-from api.pydantic_model import UserSettings
+from legacy_api.pydantic_model import UserSettings
 from utils import read_configs_from_toml 
 import pandas as pd
 
