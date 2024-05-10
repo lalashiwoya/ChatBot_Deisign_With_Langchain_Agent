@@ -51,9 +51,9 @@ def build_retriever_from_source_path(configs, key_word):
         
         
 
-def get_router_retriever(path: str):
+def get_router_retriever(configs: dict):
 
-    configs = read_configs_from_toml(path)
+    # configs = read_configs_from_toml(path)
 
     # path = "data/llm_finetune/urls/urls.txt"
     # if_clean_texts = False
@@ -66,6 +66,8 @@ def get_router_retriever(path: str):
     retrievers = []
     descriptions = []
     for topic in configs['dataset']:
+        if "llm" in topic:
+            pass
         docs = collect_docs_from_a_single_domain(configs, topic)
         retriever = get_single_retriever(db_path=configs["dataset"][topic]["db_path"],
                             chunk_size = configs["llama_index"]["chunk_size"],
@@ -75,7 +77,7 @@ def get_router_retriever(path: str):
         description = configs["dataset"][topic]["retriever_description"]
         retrievers.append(retriever)
         descriptions.append(description)
-       
+
         
     # llm_retriever = build_retriever_from_source_path(configs, "llm_finetune") 
     # llm_retriever_description = "Will retrieve all context regarding llm finetuning"

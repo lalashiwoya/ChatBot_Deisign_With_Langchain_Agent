@@ -1,4 +1,4 @@
-# Chatbot Project
+# Chatbot Project (Langchain Agent Implementation)
 
 ## Environment Setup
 1. **Create and activate a Conda environment**:

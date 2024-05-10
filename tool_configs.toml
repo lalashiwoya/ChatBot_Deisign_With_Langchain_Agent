@@ -1,0 +1,29 @@
+[qa_retriever]
+name = "LLM-XAI Knowledge Navigator"
+description = """
+The LLM-XAI Knowledge Navigator is designed to enrich the understanding of 
+large language models (LLMs) and explainable AI (XAI). It uses an advanced document 
+retrieval function to efficiently extract and present relevant information, 
+including the source details like URLs or file paths of the documents. 
+This feature ensures that users not only receive accurate insights but also can 
+trace and verify the original context.
+"""
+
+[off-topic]
+name = "Off-Topic Handler"
+description = """The Off-Topic Handler tool 
+is designed to detect and manage responses to user 
+inputs that are irrelevant or unrelated to the 
+topics or ongoing conversation of the chatbot. 
+
+If an input is determined to be off-topic, the tool generates an appropriate 
+response to gently steer the conversation back on track or maintain engagement. 
+If a user greets the chatbot with phrases such as 'Hi,' 'Hello,' or 
+similar, the tool will ensure a warm and appropriate response and a polite 
+reminder of its capabilities are returned. 
+If the user's message deviates from relevant topics, the tool offers a polite 
+reminder of its capabilities while maintaining a friendly and welcoming tone. 
+This approach helps keep the conversation focused and engaging, ensuring the user 
+feels supported and guided toward productive interactions.
+"""
+
