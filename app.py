@@ -6,9 +6,10 @@ from api.tools.tool_list import init_tools
 from llama_index.core import Settings
 from langchain.schema.runnable.config import RunnableConfig
 from utils import read_configs_from_toml
-from api.settings import init_settings, update_user_session
+from api.settings import init_settings
 from api.agent_executor import init_agent
 import os
+from api.settings import set_user_settings_as_pydantic_model
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -18,6 +19,20 @@ tool_configs = read_configs_from_toml("tool_configs.toml")
 
 tools = init_tools(tool_configs=tool_configs,
                        configs=configs)
+
+@cl.on_settings_update
+def update_user_session(settings):
+    user_settings = set_user_settings_as_pydantic_model(settings)
+    
+    if user_settings.llm_model_name:
+        print("="*20)
+        print(user_settings)
+        cl.user_session.set("user_settings", user_settings)
+        llm = init_llm(user_settings.llm_model_name)
+        agent = init_agent(llm=llm,
+                       tools=tools)
+        cl.user_session.set("agent", agent)
+        
 
 @cl.password_auth_callback
 def auth_callback(username: str, password: str):
@@ -36,21 +51,14 @@ async def on_chat_start():
     initial_settings = init_settings()
     settings = await cl.ChatSettings(initial_settings).send()
     update_user_session(settings)
-    llm = init_llm(cl.user_session.get("user_settings").llm_model_name)
+    llm = init_llm()
     memory = init_memory(llm, max_token_limit=configs['memory']['max_token_limit'])
-    # full_chain = init_full_chain(llm)
-    
-    # cl.user_session.set("full_chain", full_chain)
     cl.user_session.set("memory", memory)
-    cl.user_session.set("tools", tools)
-    # cl.user_session.set("llm", llm)
 
 @cl.on_message
 async def on_message(message: cl.Message):
     user_settings = cl.user_session.get("user_settings")
-    llm = init_llm(user_settings.llm_model_name)
-    agent = init_agent(llm=llm,
-                       tools=cl.user_session.get("tools"))
+    agent = cl.user_session.get("agent")
     # llm = init_llm(user_settings.llm_model_name)
     # agent = cl.user_session.get("agent")
     # full_chain = cl.user_session.get("full_chain")
