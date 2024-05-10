@@ -27,16 +27,18 @@ def set_user_settings_as_pydantic_model(settings):
         print("Invalid User Settings")
         
 @cl.on_settings_update
-def update_user_session(settings, tool_configs, configs):
+def update_user_session(settings):
     user_settings = set_user_settings_as_pydantic_model(settings)
-    llm = init_llm(user_settings.llm_model_name)
-    agent = init_agent(tool_configs=tool_configs,
-                       configs=configs,
-                       llm=llm)
-    if user_settings is not None:
+    # llm = init_llm(user_settings.llm_model_name)
+    # print(cl.user_session.get("tools"))
+    # agent = init_agent(
+    #                    llm=llm,
+    #                    tools=cl.user_session.get("tools"))
+    
+    if user_settings != cl.user_session.get("user_setting"):
         print("="*20)
         print(user_settings)
         cl.user_session.set("user_settings", user_settings)
-        cl.user_session.set("agent", agent)
+        # cl.user_session.set("agent", agent)
         
 

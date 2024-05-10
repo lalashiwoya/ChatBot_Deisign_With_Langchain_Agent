@@ -14,7 +14,7 @@ template = '''
     Use the following format:
     Question: the input question you must answer.
     Role: You are a polite QA system specialized in {topics}, and only answer questions regarding 
-    {topics}. If the user's query is off-topic, only use off-topic tool.
+    {topics}. If the user's query is off-topic, only use the tool Off-Topic Handler.
 
 
     You have access to the following tools:
@@ -24,8 +24,9 @@ template = '''
     Action: the action to take, should be one of [{tool_names}]
     Action Input: the input to the action
     Observation: the result of the action
-    ... (this Thought/Action/Action Input/Observation can repeat at most twice. 
-    However, if tool Off-Topic Handleris is used, this process Thought/Action/Action Input/Observation just execute once)
+    ... (this Thought/Action/Action Input/Observation can repeat at most twice. Use this process as least as possible.
+    Remember, if tool Off-Topic Handler is used, this process Thought/Action/Action Input/Observation just execute once, then
+    generate final answer)
     
     Thought: I now know the final answer
     Final Answer: Provide a comprehensive response to the original question, 
@@ -43,21 +44,20 @@ template = '''
     
 
 
-def init_agent(tool_configs: Dict, 
-               configs: Dict, 
+def init_agent(tools, 
                llm:BaseChatModel):
-    retriever = create_retriever_as_tool(tool_configs, configs)
-    off_topic_tool = create_off_topic_tool(tool_configs=tool_configs)
+    # retriever = create_retriever_as_tool(tool_configs, configs)
+    # off_topic_tool = create_off_topic_tool(tool_configs=tool_configs)
 
-    tools = [off_topic_tool, retriever]
+    # tools = [off_topic_tool, retriever]
     agent = create_react_agent(llm, tools, 
                             ChatPromptTemplate.from_template(template
     ))
     agent_executor = AgentExecutor(
         agent=agent,
         tools=tools,
-        verbose=True,
-        return_intermediate_steps=True,
+        verbose=False,
+        return_intermediate_steps=False,
         handle_parsing_errors=True
     )
     return agent_executor

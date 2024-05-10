@@ -1,6 +1,8 @@
 from api.utils import get_router_retriever
 from langchain.agents import Tool
 
+
+
 def create_retriever_as_tool(tool_configs: dict, general_configs: dict):
     # retriever = get_router_retriever(path = config_path)
     tool_name = tool_configs["qa_retriever"]["name"]

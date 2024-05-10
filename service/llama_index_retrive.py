@@ -7,7 +7,7 @@ from langchain.chat_models.base import  BaseChatModel
 from llama_index.core import Settings
 from llama_index.core import StorageContext, load_index_from_storage, VectorStoreIndex
 import os
-from utils import init_llm_for_llama_index, init_llm
+from utils import init_llm_for_llama_index
 from llama_index.core.base.base_retriever import BaseRetriever
 from llama_index.core.tools import RetrieverTool
 from llama_index.core.retrievers import RouterRetriever

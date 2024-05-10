@@ -8,6 +8,7 @@ import toml
 from llama_index.embeddings.openai import OpenAIEmbedding
 from langchain.callbacks.streaming_stdout_final_only import FinalStreamingStdOutCallbackHandler
 
+
 def init_llm(model_name = "gpt-3.5-turbo"):
     if "gpt" in model_name:
         llm = ChatOpenAI(temperature=0, model_name = model_name, streaming = True,
@@ -45,6 +46,7 @@ def read_configs_from_toml(path: str) -> dict:
 
 def init_sentence_embedding(model_name = "text-embedding-3-small"):
     return OpenAIEmbedding(model=model_name)
+
 
  
         

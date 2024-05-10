@@ -21,8 +21,6 @@ To start the application, use the following command:
 ```bash
 chainlit run app.py
 ```
-## Router Chain Implementation
-<img src="images/implementation.png" alt="Setting Panel" width="50%">
 
 ## Features
 

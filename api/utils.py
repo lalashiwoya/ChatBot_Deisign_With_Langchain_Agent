@@ -3,6 +3,7 @@ from service.data_collect import WebPagesToDocuments, PdfPagesToDocuments, Youtu
 from service.llama_index_retrive import RouterLlamaRetriever, get_single_retriever
 from utils import read_configs_from_toml, init_sentence_embedding
 
+
 def collect_docs_from_a_single_domain(configs, key_word):
     # try:
     #     clean_texts=configs["dataset"][key_word]["if_clean_texts"]
@@ -117,3 +118,7 @@ def get_router_retriever(configs: dict):
     #                                  [llm_retriever_description])
     # # relevant_docs = router_retriver.get_relevant_documents(query)
     # return router_retriver
+    
+
+
+
