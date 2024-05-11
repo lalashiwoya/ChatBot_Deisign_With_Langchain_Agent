@@ -10,7 +10,7 @@ def create_greeting_chat_history() -> List[dict]:
     return [{"input": "Hi", "output": "Hi, what can I help you?"}]
 
 def create_sample_user_settings(configs) -> UserSettings:
-    settings = UserSettings(llm_model_name=configs["full_chain"]["model_name"])
+    settings = UserSettings(llm_model_name=configs["agent"]["model_name"])
     return settings
 
 def create_greeting_chat_history() -> List[dict]:
