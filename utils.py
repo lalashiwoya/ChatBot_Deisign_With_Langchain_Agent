@@ -12,7 +12,7 @@ from langchain.callbacks.streaming_stdout_final_only import FinalStreamingStdOut
 def init_llm(model_name = "gpt-3.5-turbo"):
     if "gpt" in model_name:
         llm = ChatOpenAI(temperature=0, model_name = model_name, streaming = True,
-                         callbacks=[FinalStreamingStdOutCallbackHandler()])
+                         callbacks=[FinalStreamingStdOutCallbackHandler(answer_prefix_tokens=["Final", "Answer"])])
     # elif "llama" in model_name:
     
     #     llm = LlamaCpp(

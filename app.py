@@ -10,6 +10,7 @@ from api.settings import init_settings
 from api.agent_executor import init_agent
 import os
 from api.settings import set_user_settings_as_pydantic_model
+from langchain.schema.runnable.config import RunnableConfig
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -68,24 +69,42 @@ async def on_message(message: cl.Message):
     elements = []
     actions = []
     res = cl.Message(content="", elements=elements, actions=actions)
-    # res = await agent.acall(message.content,
-    #                              callbacks=[cl.AsyncLangchainCallbackHandler()])
-    # await res['ouptut'].send()
-    # response = await agent.invoke({
-    #         "question": message.content,
-    #         "chat_history": memory,
-    #         # "user_settings": user_settings,
-    #         "topics": "\n".join(configs["topics"]["topics"])})
-    # res.content = response['output']
-    # await res.send()
+    response = ""
+    
     async for chunk in agent.astream({
         "question": message.content,
         "chat_history": memory,
         "topics": "\n".join(configs["topics"]["topics"])
-    }):
-        if 'output' in chunk:
-            await res.stream_token(chunk['output'])
-    await res.send()
+    }, config=RunnableConfig(callbacks=[
+                                        cl.LangchainCallbackHandler(
+        stream_final_answer=True,
+    )
+                                        ])):
+        
+        content = chunk['messages'][0].content
+        marker = "Final Answer:"
+        if marker in content:
+            
+            response = content.split(marker)[-1].strip()
+    
+    # async for chunk in agent.astream({
+    #     "question": message.content,
+    #     "chat_history": memory,
+    #     "topics": "\n".join(configs["topics"]["topics"])
+    # }, config=RunnableConfig(callbacks=[
+    #                                     cl.LangchainCallbackHandler(
+    #     stream_final_answer=True,
+    # )
+    #                                     ])):
+        
+    #     content = chunk['messages'][0].content
+    #     marker = "Final Answer:"
+    #     if marker in content:
+            
+    #         response = content.split(marker)[-1].strip()
+
+    # await res.send()
+    
         
                     
         
