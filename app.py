@@ -11,6 +11,7 @@ from api.agent_executor import init_agent
 import os
 from api.settings import set_user_settings_as_pydantic_model
 from langchain.schema.runnable.config import RunnableConfig
+from utils import custom_load_memory
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -73,7 +74,7 @@ async def on_message(message: cl.Message):
     
     async for chunk in agent.astream({
         "question": message.content,
-        "chat_history": memory,
+        "chat_history": custom_load_memory(memory),
         "topics": "\n".join(configs["topics"]["topics"])
     }, config=RunnableConfig(callbacks=[
                                         cl.LangchainCallbackHandler(
@@ -86,6 +87,7 @@ async def on_message(message: cl.Message):
         if marker in content:
             
             response = content.split(marker)[-1].strip()
+    memory.save_context({"input": message.content}, {"output": response})
     
     # async for chunk in agent.astream({
     #     "question": message.content,
