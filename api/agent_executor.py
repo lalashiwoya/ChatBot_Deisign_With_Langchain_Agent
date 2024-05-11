@@ -26,15 +26,15 @@ template = '''
     You have access to the following tools:
     {tools}
 
-    Thought:\n you should always think about what to do
-    Action:\n the action to take, should be one of [{tool_names}]
-    Action Input:\n the input to the action 
-    Observation:\n the result of the action 
-    ... (this Thought/Action/Action Input/Observation can repeat at most twice. Use this process as least as possible.
+    Thought:\n you should always think about what to do\n
+    Action:\n the action to take, should be one of [{tool_names}]\n
+    Action Input:\n the input to the action\n
+    Observation:\n the result of the action\n
+    ... (this Thought/Action/Action Input/Observation can repeat N times. Use this process as least as possible.
     Remember, if tool Off-Topic Handler is used, this process Thought/Action/Action Input/Observation just execute once, then
     generate final answer)\n
     
-    Thought:\n I now know the final answer
+    Thought:\n I now know the final answer\n
     
     
     
@@ -59,9 +59,11 @@ def init_agent(tools,
     agent_executor = AgentExecutor(
         agent=agent,
         tools=tools,
-        verbose=False,
-        handle_parsing_errors=True,
-        early_stopping_method="generate",
+        verbose=True,
+        return_intermediate_steps=True,
+        max_iterations=3,
+        handle_parsing_errors = """
+        Use the last observation as the context to generate final answer;""",
         callbacks=[FinalStreamingStdOutCallbackHandler(answer_prefix_tokens=["Final", "Answer", ":"])]
     )
     return agent_executor
