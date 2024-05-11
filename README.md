@@ -1,4 +1,15 @@
 # Chatbot Project (Langchain Agent Implementation)
+My initial version of the chatbot was implemented using a router chain, where I can define the sequence of actions in a hardcoded way. However, issues arose with this approach:
+- The router chain includes a classification chain to determine if a user's query is off-topic.
+- If a user's previous query was "What is LLM fine-tuning?" and the next question is "Why is it important?", the latter might be classified as off-topic despite memory being fed to the classification chain.
+
+The agent leverages the reasoning capabilities of LLMs, allowing it to decompose tasks into smaller subtasks and determine the order of actions. Memory plays a more crucial role, enhancing context handling and continuity. I switched from using `initialize_agent`, which is more common in tutorials but now deprecated, to `create_react_agent` for creating an agent.
+
+Despite its advantages, the agent implementation has its drawbacks:
+- **Completion Challenges:** Due to the dependency on the LLM's reasoning capabilities, the thinking process may not finish in time or within the iteration limit, resulting in no answer being returned. Unlike the agent-based approach, the router chain design consistently returns an answer, although it may not always be accurate or relevant.
+
+While the upgrade from GPT-3.5 to GPT-4 offers minimal improvements in a router chain setup, it is significantly more effective in an agent-based implementation.
+
 
 ## Environment Setup
 1. **Create and activate a Conda environment**:
@@ -90,5 +101,6 @@ Below is a preview of the web interface for the chatbot:
 
 ## Configuration
 
-To customize the chatbot according to your needs, define your configurations in the `config.toml` file.
+To customize the chatbot according to your needs, define your configurations in the `config.toml` file and `tool_configs.toml` where you can define the name and descriptions of your tools.
+
 
