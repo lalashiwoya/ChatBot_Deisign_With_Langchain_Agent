@@ -3,12 +3,19 @@ My initial version of the chatbot was implemented using a router chain, where I 
 - The router chain includes a classification chain to determine if a user's query is off-topic.
 - If a user's previous query was "What is LLM fine-tuning?" and the next question is "Why is it important?", the latter might be classified as off-topic despite memory being fed to the classification chain.
 
-The agent leverages the reasoning capabilities of LLMs, allowing it to decompose tasks into smaller subtasks and determine the order of actions. Memory plays a more crucial role, enhancing context handling and continuity. I switched from using `initialize_agent`, which is more common in tutorials but now deprecated, to `create_react_agent` for creating an agent.
+The agent leverages the reasoning capabilities of LLMs, allowing it to decompose tasks into smaller subtasks and determine the order of actions and identifie the most appropriate tools for each specific action. Memory plays a more crucial role here. I switched from using `initialize_agent`, which is more common in tutorials but now deprecated, to `create_react_agent` for creating an agent.
 
 Despite its advantages, the agent implementation has its drawbacks:
-- **Completion Challenges:** Due to the dependency on the LLM's reasoning capabilities, the thinking process may not finish in time or within the iteration limit, resulting in no answer being returned. Unlike the agent-based approach, the router chain design consistently returns an answer, although it may not always be accurate or relevant.
+- Due to the dependency on the LLM's reasoning capabilities, the thinking process may not finish in time or within the iteration limit, resulting in no answer being returned. Unlike the agent-based approach, the router chain design consistently returns an answer, although it may not always be accurate or relevant.
+
+- There is essentially a single, comprehensive prompt that governs the behavior of the Large Language Model (LLM). This prompt includes e.g, final answer formatting, final answer requirement, tool usage suggestions and more. Adhering to these complex requirements poses significant challenges, particularly for GPT-3.5. For example, despite explicit demands for source uniqueness in the final answers, GPT-3.5 sometimes fails to comply. Additionally, there are occasions where it does not adhere to the requested answer format, highlighting the limitations in its ability to retain sets of instructions compared to its successor, GPT-4.
+
 
 While the upgrade from GPT-3.5 to GPT-4 offers minimal improvements in a router chain setup, it is significantly more effective in an agent-based implementation.
+
+
+For the next phase, I plan to implement LangGraph to apply control flow constraints on the Large Language Model (LLM). 
+
 
 
 ## Environment Setup
