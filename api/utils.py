@@ -67,8 +67,6 @@ def get_router_retriever(configs: dict):
     retrievers = []
     descriptions = []
     for topic in configs['dataset']:
-        if "llm" in topic:
-            pass
         docs = collect_docs_from_a_single_domain(configs, topic)
         retriever = get_single_retriever(db_path=configs["dataset"][topic]["db_path"],
                             chunk_size = configs["llama_index"]["chunk_size"],
