@@ -75,7 +75,8 @@ async def on_message(message: cl.Message):
     async for chunk in agent.astream({
         "question": message.content,
         "chat_history": custom_load_memory(memory),
-        "topics": "\n".join(configs["topics"]["topics"])
+        "topics": "\n".join(configs["topics"]["topics"]),
+        "model_name": user_settings.llm_model_name
     }, config=RunnableConfig(callbacks=[
                                         cl.LangchainCallbackHandler(
         stream_final_answer=True,
