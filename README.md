@@ -104,7 +104,7 @@ This guide details the steps for setting up user authentication in your applicat
 
 Below is a preview of the web interface for the chatbot:
 
-![Web Page](images/present_web.gif)
+![Web Page](images/agent.gif)
 
 ## Configuration
 
